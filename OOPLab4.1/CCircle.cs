@@ -37,7 +37,7 @@ namespace OOPLab4._1
             standartPen = new Pen(Color.Black, 5);
             selectedPen = new Pen(Color.Red, 5);
             active = false;
-            currentColor = color;
+            setColor(color.Name);
         }
 
         public override void myPaint(in Graphics g)
@@ -45,11 +45,11 @@ namespace OOPLab4._1
             if (isActive)
             {
                 g.DrawEllipse(selectedPen, x - radius, y - radius, radius * 2, radius * 2);
-                g.FillEllipse(new SolidBrush(currentColor), new Rectangle(x - radius, y - radius, radius * 2, radius * 2));
+                g.FillEllipse(new SolidBrush(getColor()), new Rectangle(x - radius, y - radius, radius * 2, radius * 2));
             } else
             {
                 g.DrawEllipse(standartPen, x - radius, y - radius, radius * 2, radius * 2);
-                g.FillEllipse(new SolidBrush(currentColor), new Rectangle(x - radius, y - radius, radius * 2, radius * 2));
+                g.FillEllipse(new SolidBrush(getColor()), new Rectangle(x - radius, y - radius, radius * 2, radius * 2));
             }
         }
 
@@ -62,11 +62,6 @@ namespace OOPLab4._1
             {
                 return false;
             }
-        }
-
-        public override void changeColor(Color newColor)
-        {
-            currentColor = newColor;
         }
 
         public override void move(Point direction)
@@ -94,7 +89,8 @@ namespace OOPLab4._1
         {
             x = Convert.ToInt32(reader.ReadLine());
             y = Convert.ToInt32(reader.ReadLine());
-            //color = Convert.ToString(reader.ReadLine());
+            radius = Convert.ToInt32(reader.ReadLine());
+            setColor(Convert.ToString(reader.ReadLine()));
         }
 
         public override void save(StreamWriter writer)
@@ -102,6 +98,8 @@ namespace OOPLab4._1
             writer.WriteLine("Circle");
             writer.WriteLine(x.ToString());
             writer.WriteLine(y.ToString());
+            writer.WriteLine(radius.ToString());
+            writer.WriteLine(getColor().Name);
         }
     }
 }

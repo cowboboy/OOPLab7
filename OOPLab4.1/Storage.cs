@@ -76,11 +76,9 @@ namespace OOPLab4._1
             {
                 using (StreamReader reader = new StreamReader(fileName))
                 {
-                    //int size;
                     Figure figure;
                     string? line;
 
-                    //size = Convert.ToInt32(reader.ReadLine());
                     while ((line = reader.ReadLine()) != null)
                     {
                         figure = factory.createFigure(Convert.ToString(line));

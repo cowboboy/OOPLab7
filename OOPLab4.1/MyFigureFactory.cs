@@ -19,6 +19,12 @@ namespace OOPLab4._1
                 case "Square":
                     figure = new Square();
                     break;
+                case "Triangle":
+                    figure = new Triangle();
+                    break;
+                case "Group":
+                    figure = new Group();
+                    break;
             }
             return figure;
         }

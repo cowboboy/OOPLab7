@@ -57,11 +57,11 @@ namespace OOPLab4._1
             return false;
         }
 
-        public override void changeColor(Color newColor)
+        public override void setColor(string colorName)
         {
             for (int i = 0; i < storage.size; ++i)
             {
-                storage.getObject(i).currentColor = newColor;
+                storage.getObject(i).setColor(colorName);
             }
         }
 

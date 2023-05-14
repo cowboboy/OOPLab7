@@ -36,7 +36,7 @@ namespace OOPLab4._1
             standartPen = new Pen(Color.Black, 5);
             selectedPen = new Pen(Color.Red, 5);
             active = false;
-            currentColor = color;
+            setColor(color.Name);
         }
 
         public override void myPaint(in Graphics g)
@@ -44,12 +44,12 @@ namespace OOPLab4._1
             if (isActive)
             {
                 g.DrawRectangle(selectedPen, x - sideLength / 2, y - sideLength / 2, sideLength, sideLength);
-                g.FillRectangle(new SolidBrush(currentColor), new Rectangle(x - sideLength / 2, y - sideLength / 2, sideLength, sideLength));
+                g.FillRectangle(new SolidBrush(getColor()), new Rectangle(x - sideLength / 2, y - sideLength / 2, sideLength, sideLength));
             }
             else
             {
                 g.DrawRectangle(standartPen, x - sideLength / 2, y - sideLength / 2, sideLength, sideLength);
-                g.FillRectangle(new SolidBrush(currentColor), new Rectangle(x - sideLength / 2, y - sideLength / 2, sideLength, sideLength));
+                g.FillRectangle(new SolidBrush(getColor()), new Rectangle(x - sideLength / 2, y - sideLength / 2, sideLength, sideLength));
             }
         }
 
@@ -63,11 +63,6 @@ namespace OOPLab4._1
             {
                 return false;
             }
-        }
-
-        public override void changeColor(Color newColor)
-        {
-            currentColor = newColor;
         }
 
         public override void move(Point direction)
@@ -93,8 +88,8 @@ namespace OOPLab4._1
         {
             x = Convert.ToInt32(reader.ReadLine());
             y = Convert.ToInt32(reader.ReadLine());
-            color = Convert.ToString(reader.ReadLine());
-            reader.ReadLine();
+            sideLength = Convert.ToInt32(reader.ReadLine());
+            setColor(Convert.ToString(reader.ReadLine()));
         }
 
         public override void save(StreamWriter writer)
@@ -102,7 +97,8 @@ namespace OOPLab4._1
             writer.WriteLine("Square");
             writer.WriteLine(x.ToString());
             writer.WriteLine(y.ToString());
-            writer.WriteLine(color);
+            writer.WriteLine(sideLength.ToString());
+            writer.WriteLine(getColor().Name);
         }
     }
 }

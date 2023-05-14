@@ -272,7 +272,7 @@ namespace OOPLab4._1
             {
                 if (storage.getObject(i).isActive)
                 {
-                    storage.getObject(i).changeColor((Color)setColor.SelectedItem);
+                    storage.getObject(i).setColor(setColor.Text);
                 }
             }
             PaintBox.Refresh();

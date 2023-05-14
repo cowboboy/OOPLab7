@@ -23,6 +23,13 @@ namespace OOPLab4._1
                 active = value;
             }
         }
+
+        public Triangle()
+        {
+            standartPen = new Pen(Color.Black, 5);
+            selectedPen = new Pen(Color.Red, 5);
+            active = false;
+        }
         public Triangle(int x, int y, Color color, int side = 100)
         {
             this.x = x;
@@ -31,7 +38,7 @@ namespace OOPLab4._1
             standartPen = new Pen(Color.Black, 5);
             selectedPen = new Pen(Color.Red, 5);
             active = false;
-            currentColor = color;
+            setColor(color.Name);
         }
 
         public override void myPaint(in Graphics g)
@@ -39,12 +46,12 @@ namespace OOPLab4._1
             if (isActive)
             {
                 g.DrawPolygon(selectedPen, new Point[] { new Point(x, y - side), new Point((x + side), y), new Point(x - side, y) });
-                g.FillPolygon(new SolidBrush(currentColor), new Point[] { new Point(x, y - side), new Point((x + side), y), new Point(x - side, y) });
+                g.FillPolygon(new SolidBrush(getColor()), new Point[] { new Point(x, y - side), new Point((x + side), y), new Point(x - side, y) });
             }
             else
             {
                 g.DrawPolygon(standartPen, new Point[] { new Point(x, y - side), new Point((x + side), y), new Point(x - side, y) });
-                g.FillPolygon(new SolidBrush(currentColor), new Point[] { new Point(x, y - side), new Point((x + side), y), new Point(x - side, y) });
+                g.FillPolygon(new SolidBrush(getColor()), new Point[] { new Point(x, y - side), new Point((x + side), y), new Point(x - side, y) });
             }
         }
 
@@ -63,11 +70,6 @@ namespace OOPLab4._1
             {
                 return false;
             }
-        }
-
-        public override void changeColor(Color newColor)
-        {
-            currentColor = newColor;
         }
 
         public override void move(Point direction)
@@ -93,8 +95,8 @@ namespace OOPLab4._1
         {
             x = Convert.ToInt32(reader.ReadLine());
             y = Convert.ToInt32(reader.ReadLine());
-            color = Convert.ToString(reader.ReadLine());
-            reader.ReadLine();
+            side = Convert.ToInt32(reader.ReadLine());
+            setColor(Convert.ToString(reader.ReadLine()));
         }
 
         public override void save(StreamWriter writer)
@@ -102,7 +104,8 @@ namespace OOPLab4._1
             writer.WriteLine("Triangle");
             writer.WriteLine(x.ToString());
             writer.WriteLine(y.ToString());
-            writer.WriteLine(color);
+            writer.WriteLine(side.ToString());
+            writer.WriteLine(getColor().Name);
         }
     }
 }
