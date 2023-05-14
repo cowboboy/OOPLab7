@@ -22,7 +22,13 @@ namespace OOPLab4._1
                 active = value;
             }
         }
-
+        public CCircle()
+        {
+            standartPen = new Pen(Color.Black, 5);
+            selectedPen = new Pen(Color.Red, 5);
+            active = false;
+            radius = 50;
+        }
         public CCircle(int x, int y, Color color, int radius = 50)
         {
             this.x = x;
@@ -82,6 +88,20 @@ namespace OOPLab4._1
             radius = Convert.ToInt32(factor * radius);
             //x = Convert.ToInt32(factor * x);
             //y = Convert.ToInt32(factor * y);
+        }
+
+        public override void load(StreamReader reader)
+        {
+            x = Convert.ToInt32(reader.ReadLine());
+            y = Convert.ToInt32(reader.ReadLine());
+            //color = Convert.ToString(reader.ReadLine());
+        }
+
+        public override void save(StreamWriter writer)
+        {
+            writer.WriteLine("Circle");
+            writer.WriteLine(x.ToString());
+            writer.WriteLine(y.ToString());
         }
     }
 }

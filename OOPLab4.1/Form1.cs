@@ -9,7 +9,6 @@ namespace OOPLab4._1
         bool pressedCtrl = false;
         bool isMove = false;
         bool isScale = false;
-        bool isBound = false;
 
         Point leftTopPaintBox;
         Point rightBottomPaintBox;
@@ -40,6 +39,9 @@ namespace OOPLab4._1
             leftTopPaintBox = new Point(0, 0);
             rightBottomPaintBox.X = PaintBox.Width;
             rightBottomPaintBox.Y = PaintBox.Height;
+            MyFigureFactory factory = new MyFigureFactory();
+            storage.loadFigures("dataFigures.txt", factory);
+            PaintBox.Refresh();
         }
 
         private void PaintBox_MouseClick(object sender, MouseEventArgs e)
@@ -329,6 +331,11 @@ namespace OOPLab4._1
                 }
             }
             PaintBox.Refresh();
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            storage.saveFigures("dataFigures.txt");
         }
     }
 }

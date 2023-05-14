@@ -13,11 +13,14 @@ namespace OOPLab4._1
         public abstract bool isActive { get; set; }
         protected Pen selectedPen, standartPen;
         public Color currentColor { get; set; } = Color.White;
+        protected string color;
         public abstract void myPaint(in Graphics g);
         public abstract bool intersects(Point coords);
         public abstract void changeColor(Color newColor);
         public abstract void move(Point direction);
         public abstract void changeScale(float factor);
         public abstract void getRect(ref Point leftTop, ref Point rightBottom);
+        public abstract void load(StreamReader reader);
+        public abstract void save(StreamWriter writer);
     }
 }

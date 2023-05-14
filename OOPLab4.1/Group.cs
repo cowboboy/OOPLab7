@@ -108,5 +108,21 @@ namespace OOPLab4._1
                 storage.getObject(i).changeScale(factor);
             }
         }
+
+        public override void load(StreamReader reader)
+        {
+            for (int i = 0; i < storage.size; ++i)
+            {
+                storage.getObject(i).load(reader);
+            }
+        }
+
+        public override void save(StreamWriter writer)
+        {
+            for (int i = 0; i < storage.size; ++i)
+            {
+                storage.getObject(i).save(writer);
+            }
+        }
     }
 }

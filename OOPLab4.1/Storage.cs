@@ -69,5 +69,44 @@ namespace OOPLab4._1
         {
             return ref elements[index];
         }
+
+        public void loadFigures(string fileName, FigureFactory factory)
+        {
+            if (File.Exists(fileName))
+            {
+                using (StreamReader reader = new StreamReader(fileName))
+                {
+                    //int size;
+                    Figure figure;
+                    string? line;
+
+                    //size = Convert.ToInt32(reader.ReadLine());
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        figure = factory.createFigure(Convert.ToString(line));
+                        if (figure != null)
+                        {
+                            figure.load(reader);
+                            push_back(figure);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void saveFigures(string fileName)
+        {
+            if (!File.Exists(fileName))
+            {
+                File.Create(fileName).Close();
+            }
+            using (StreamWriter writer = new StreamWriter(fileName))
+            {
+                for (int i = 0; i < size; ++i)
+                {
+                    elements[i].save(writer);
+                }
+            }
+        }
     }
 }

@@ -88,5 +88,21 @@ namespace OOPLab4._1
         {
             side = Convert.ToInt32(factor * side);
         }
+
+        public override void load(StreamReader reader)
+        {
+            x = Convert.ToInt32(reader.ReadLine());
+            y = Convert.ToInt32(reader.ReadLine());
+            color = Convert.ToString(reader.ReadLine());
+            reader.ReadLine();
+        }
+
+        public override void save(StreamWriter writer)
+        {
+            writer.WriteLine("Triangle");
+            writer.WriteLine(x.ToString());
+            writer.WriteLine(y.ToString());
+            writer.WriteLine(color);
+        }
     }
 }

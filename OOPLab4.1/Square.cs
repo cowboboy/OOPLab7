@@ -21,6 +21,12 @@ namespace OOPLab4._1
                 active = value;
             }
         }
+        public Square()
+        {
+            standartPen = new Pen(Color.Black, 5);
+            selectedPen = new Pen(Color.Red, 5);
+            active = false;
+        }
 
         public Square(int x, int y, Color color, int sideLength = 50)
         {
@@ -81,6 +87,22 @@ namespace OOPLab4._1
         public override void changeScale(float factor)
         {
             sideLength = Convert.ToInt32(factor * sideLength);
+        }
+
+        public override void load(StreamReader reader)
+        {
+            x = Convert.ToInt32(reader.ReadLine());
+            y = Convert.ToInt32(reader.ReadLine());
+            color = Convert.ToString(reader.ReadLine());
+            reader.ReadLine();
+        }
+
+        public override void save(StreamWriter writer)
+        {
+            writer.WriteLine("Square");
+            writer.WriteLine(x.ToString());
+            writer.WriteLine(y.ToString());
+            writer.WriteLine(color);
         }
     }
 }
