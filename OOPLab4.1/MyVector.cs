@@ -53,9 +53,19 @@ namespace OOPLab4._1
                 Y = size.Height;
             }
 
+            public double getLenght()
+            {
+                return Math.Sqrt(X * X + Y * Y);
+            }
+
             public static MyVector operator +(MyVector a, MyVector b)
             {
                 return new MyVector(a.X + b.X, a.Y + b.Y);
+            }
+
+            public static MyVector operator +(MyVector a, int b)
+            {
+                return new MyVector(a.X + b, a.Y + b);
             }
 
             public static MyVector operator -(MyVector a, MyVector b)
@@ -68,7 +78,7 @@ namespace OOPLab4._1
                 return new MyVector(Convert.ToInt32(a.X * b), Convert.ToInt32(a.Y * b));
             }
 
-            public static MyVector operator /(MyVector a, int b)
+            public static MyVector operator /(MyVector a, float b)
             {
                 return new MyVector(Convert.ToInt32(a.X / b), Convert.ToInt32(a.Y / b));
             }

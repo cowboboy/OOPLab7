@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OOPLab4._1.OOPLab4._1;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,10 +27,10 @@ namespace OOPLab4._1
             this.color = color;
         }
         public abstract void myPaint(in Graphics g);
-        public abstract bool intersects(Point coords);
-        public abstract void move(Point direction);
-        public abstract void changeScale(float factor);
-        public abstract void getRect(ref Point leftTop, ref Point rightBottom);
+        public abstract bool intersects(MyVector coords);
+        public abstract void move(MyVector direction);
+        public abstract void changeScale(float speed, bool increase = true);
+        public abstract void getRect(MyVector leftTop, MyVector rightBottom);
         public abstract void load(StreamReader reader, FigureFactory factory);
         public abstract void save(StreamWriter writer);
     }

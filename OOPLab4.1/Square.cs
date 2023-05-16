@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OOPLab4._1.OOPLab4._1;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -53,7 +54,7 @@ namespace OOPLab4._1
             }
         }
 
-        public override bool intersects(Point coords)
+        public override bool intersects(MyVector coords)
         {
             if (coords.X >= x - sideLength / 2 && coords.X <= x + sideLength / 2 && coords.Y >= y - sideLength / 2 && coords.Y <= y + sideLength / 2)
             {
@@ -65,13 +66,13 @@ namespace OOPLab4._1
             }
         }
 
-        public override void move(Point direction)
+        public override void move(MyVector direction)
         {
             x += direction.X;
             y += direction.Y;
         }
 
-        public override void getRect(ref Point leftTop, ref Point rightBottom)
+        public override void getRect(MyVector leftTop, MyVector rightBottom)
         {
             leftTop.X = x - sideLength / 2;
             leftTop.Y = y - sideLength / 2;
@@ -79,9 +80,16 @@ namespace OOPLab4._1
             rightBottom.Y = y + sideLength / 2;
         }
 
-        public override void changeScale(float factor)
+        public override void changeScale(float factor, bool increase)
         {
-            sideLength = Convert.ToInt32(factor * sideLength);
+            if (increase)
+            {
+                sideLength = Convert.ToInt32(factor * sideLength);
+            }
+            else
+            {
+                sideLength = Convert.ToInt32(sideLength / factor);
+            }
         }
 
         public override void load(StreamReader reader, FigureFactory factory)

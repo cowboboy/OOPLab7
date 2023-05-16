@@ -1,3 +1,4 @@
+using OOPLab4._1.OOPLab4._1;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -29,7 +30,7 @@ namespace OOPLab4._1
 
         Color currentColor;
 
-        Point lastMouseCoords;
+        MyVector lastMouseCoords;
 
         public Form1()
         {
@@ -57,7 +58,7 @@ namespace OOPLab4._1
                     if (isCollisionActive)
                     {
                         // Делаем активными все выбранные левой кнопкой мыши элементы
-                        if (e.Button == MouseButtons.Left && storage.getObject(i).intersects(e.Location) && isFirstLayer)
+                        if (e.Button == MouseButtons.Left && storage.getObject(i).intersects(new MyVector(e.Location)) && isFirstLayer)
                         {
                             storage.getObject(i).isActive = true;
                             isFirstLayer = false;
@@ -65,7 +66,7 @@ namespace OOPLab4._1
                         // Не затираем активные элементы, так как работает Ctrl
                     } else
                     {
-                        if (e.Button == MouseButtons.Left && storage.getObject(i).intersects(e.Location))
+                        if (e.Button == MouseButtons.Left && storage.getObject(i).intersects(new MyVector(e.Location)))
                         {
                             storage.getObject(i).isActive = true;
                         }
@@ -75,7 +76,7 @@ namespace OOPLab4._1
                 {
                     if (isCollisionActive)
                     {
-                        if (e.Button == MouseButtons.Left && storage.getObject(i).intersects(e.Location) && isFirstLayer)
+                        if (e.Button == MouseButtons.Left && storage.getObject(i).intersects(new MyVector(e.Location)) && isFirstLayer)
                         {
                             storage.getObject(i).isActive = true;
                             isFirstLayer = false;
@@ -87,7 +88,7 @@ namespace OOPLab4._1
                     }
                     else
                     {
-                        if (e.Button == MouseButtons.Left && storage.getObject(i).intersects(e.Location))
+                        if (e.Button == MouseButtons.Left && storage.getObject(i).intersects(new MyVector(e.Location)))
                         {
                             storage.getObject(i).isActive = true;
                         }
@@ -115,8 +116,8 @@ namespace OOPLab4._1
                         element = new Triangle(e.Location.X, e.Location.Y, currentColor);
                         break;
                 }
-                Point leftTop = new Point(), rightBottom = new Point();
-                element.getRect(ref leftTop, ref rightBottom);
+                MyVector leftTop = new MyVector(), rightBottom = new MyVector();
+                element.getRect(leftTop, rightBottom);
                 if (isNotCollision(leftTop, rightBottom))
                 {
                     storage.push_back(element);
@@ -158,16 +159,19 @@ namespace OOPLab4._1
                 case Keys.B:
                     bindFigures();
                     break;
+                case Keys.U:
+                    unBindFigures();
+                    break;
                 case Keys.Up:
                     if (isScale)
                     {
-                        changeScale(1.1f);
+                        changeScale(1.1f, true);
                     }
                     break;
                 case Keys.Down:
                     if (isScale)
                     {
-                        changeScale(0.9f);
+                        changeScale(1.1f, false);
                     }
                     break;
             }
@@ -187,6 +191,34 @@ namespace OOPLab4._1
                     }
                 }
                 storage.push_back(group);
+            }
+        }
+
+        private void unBindFigures()
+        {
+            List<Figure> tempFigures = new List<Figure>();
+            if (sizeActive() > 0)
+            {
+                for (int i = 0; i < storage.size; ++i)
+                {
+                    if (storage.getObject(i).isActive && storage.getObject(i) is Group)
+                    {
+                        Figure result;
+                        do
+                        {
+                            result = (Figure)((Group)storage.getObject(i)).popFigure();
+                            tempFigures.Add(result);
+                        }
+                        while (result != null);
+                        storage.pop(i);
+                        --i;
+
+                    }
+                }
+            }
+            foreach (var figure in tempFigures)
+            {
+                storage.push_back(figure);
             }
         }
 
@@ -232,36 +264,94 @@ namespace OOPLab4._1
                 PaintBox.Refresh();
             }
         }
-
-        private void changeScale(float factor)
+        private void getRect(MyVector leftTop, MyVector rightBottom)
         {
-            Point leftTop = new Point(), rightBottom = new Point();
-            //getRect(ref leftTop, ref rightBottom);
-            Point testRightBottom = new Point((int)(rightBottom.X * factor), (int)(rightBottom.Y * factor));
-            if (isNotCollision(leftTop, testRightBottom) &&
-                testRightBottom.X - leftTop.X > 50 && testRightBottom.Y - leftTop.Y > 50)
+            storage.getObject(0).getRect(leftTop, rightBottom);
+            MyVector curLeftTop = new MyVector();
+            MyVector curRightBottom = new MyVector();
+            for (int i = 1; i < storage.size; ++i)
+            {
+                Figure curElem = storage.getObject(i);
+                curElem.getRect(curLeftTop, curRightBottom);
+                if (curElem.isActive)
+                {
+                    if (curLeftTop.X < leftTop.X)
+                    {
+                        leftTop.X = curLeftTop.X;
+                    }
+                    if (curLeftTop.Y < leftTop.Y)
+                    {
+                        leftTop.Y = curLeftTop.Y;
+                    }
+                    if (curRightBottom.X > rightBottom.X)
+                    {
+                        rightBottom.X = curRightBottom.X;
+                    }
+                    if (curRightBottom.Y > rightBottom.Y)
+                    {
+                        rightBottom.Y = curRightBottom.Y;
+                    }
+                }
+            }
+        }
+
+        private void changeScale(float factor, bool increase = true)
+        {
+            MyVector leftTop = new MyVector();
+            MyVector rightBottom = new MyVector();
+            getRect(leftTop, rightBottom);
+            MyVector center = (leftTop + rightBottom) / 2;
+
+            MyVector ray = new MyVector(), factorRay = new MyVector();
+
+            ray = leftTop - center;
+            if (increase)
+            {
+                factorRay = (leftTop - center) * factor;
+            } else
+            {
+                factorRay = (leftTop - center) / factor;
+            }
+            MyVector testLeftTop = leftTop + factorRay - ray;
+
+            ray = rightBottom - center;
+            if (increase)
+            {
+                factorRay = (rightBottom - center) * factor;
+            } else
+            {
+                factorRay = (rightBottom - center) / factor;
+            }
+            MyVector testRightBottom = rightBottom + factorRay - ray;
+            // testRightBottom.X - leftTop.X > 70 && testRightBottom.Y - leftTop.Y > 70
+
+            if (isNotCollision(testLeftTop, testRightBottom))
             {
                 for (int i = 0; i < storage.size; ++i)
                 {
-                    Point direction = new Point();
-                    //direction.X = testRightBottom.X - rightBottom.X;
-                    //direction.Y = testRightBottom.Y - rightBottom.Y;
-                    direction.X = (int)(factor * (storage.getObject(i).x - leftTop.X)) - (storage.getObject(i).x - leftTop.X);
-                    direction.Y = (int)(factor * (storage.getObject(i).y - leftTop.Y)) - (storage.getObject(i).y - leftTop.Y);
+                    ray = new MyVector(storage.getObject(i).x, storage.getObject(i).y) - center;
+                    if (increase)
+                    {
+                        factorRay = (new MyVector(storage.getObject(i).x, storage.getObject(i).y) - center) * factor;
+                    } else
+                    {
+                        factorRay = (new MyVector(storage.getObject(i).x, storage.getObject(i).y) - center) / factor;
+                    }
+                    MyVector direction = factorRay - ray;
                     if (storage.getObject(i).isActive)
                     {
-                        storage.getObject(i).move(direction);
-                        storage.getObject(i).changeScale(factor);
+                        //storage.getObject(i).move(direction);
+                        storage.getObject(i).changeScale(factor, increase);
                     }
                 }
             }
             PaintBox.Refresh();
         }
 
-        private void move(Point mouseCoords)
+        private void move(MyVector mouseCoords)
         {
-            Point leftTop = new Point();
-            Point rightBottom = new Point();
+            MyVector leftTop = new MyVector();
+            MyVector rightBottom = new MyVector();
             if (isMove)
             {
                 int dX = mouseCoords.X - lastMouseCoords.X;
@@ -270,14 +360,14 @@ namespace OOPLab4._1
                 {
                     if (storage.getObject(i).isActive)
                     {
-                        storage.getObject(i).getRect(ref leftTop, ref rightBottom);
+                        storage.getObject(i).getRect(leftTop, rightBottom);
                         leftTop.X += dX;
                         leftTop.Y += dY;
                         rightBottom.X += dX;
                         rightBottom.Y += dY;
                         if (isNotCollision(leftTop, rightBottom))
                         {
-                            storage.getObject(i).move(new Point(dX, dY));
+                            storage.getObject(i).move(new MyVector(dX, dY));
                         }
 
                     }
@@ -318,7 +408,7 @@ namespace OOPLab4._1
             currentFigure = (Figures)setFigure.SelectedItem;
         }
 
-        private bool isNotCollision(in Point leftTop, in Point rightBottom)
+        private bool isNotCollision(MyVector leftTop, MyVector rightBottom)
         {
             if (leftTop.X > leftTopPaintBox.X && leftTop.Y > leftTopPaintBox.Y &&
                 rightBottom.X < rightBottomPaintBox.X && rightBottom.Y < rightBottomPaintBox.Y)
@@ -330,7 +420,7 @@ namespace OOPLab4._1
 
         private void PaintBox_MouseMove(object sender, MouseEventArgs e)
         {
-            move(e.Location);
+            move(new MyVector(e.Location));
         }
 
         private void PaintBox_Resize(object sender, EventArgs e)
@@ -339,8 +429,8 @@ namespace OOPLab4._1
             rightBottomPaintBox.Y = PaintBox.Height;
             for (int i = 0; i < storage.size; ++i)
             {
-                Point leftTop = new Point(), rightBottom = new Point();
-                storage.getObject(i).getRect(ref leftTop, ref rightBottom);
+                MyVector leftTop = new MyVector(), rightBottom = new MyVector();
+                storage.getObject(i).getRect(leftTop, rightBottom);
                 if (!isNotCollision(leftTop, rightBottom))
                 {
                     storage.pop(i);

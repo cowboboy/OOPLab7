@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OOPLab4._1.OOPLab4._1;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -53,7 +54,7 @@ namespace OOPLab4._1
             }
         }
 
-        public override bool intersects(Point coords)
+        public override bool intersects(MyVector coords)
         {
             if ((coords.X - x) * (coords.X - x) + (coords.Y - y) * (coords.Y - y) <= radius * radius)
             {
@@ -64,13 +65,13 @@ namespace OOPLab4._1
             }
         }
 
-        public override void move(Point direction)
+        public override void move(MyVector direction)
         {
             x += direction.X;
             y += direction.Y;
         }
 
-        public override void getRect(ref Point leftTop, ref Point rightBottom)
+        public override void getRect(MyVector leftTop, MyVector rightBottom)
         {
             leftTop.X = x - radius;
             leftTop.Y = y - radius;
@@ -78,9 +79,15 @@ namespace OOPLab4._1
             rightBottom.Y = y + radius;
         }
 
-        public override void changeScale(float factor)
+        public override void changeScale(float factor, bool increase)
         {
-            radius = Convert.ToInt32(factor * radius);
+            if (increase)
+            {
+                radius = Convert.ToInt32(factor * radius);
+            } else
+            {
+                radius = Convert.ToInt32(radius / factor);
+            }
             //x = Convert.ToInt32(factor * x);
             //y = Convert.ToInt32(factor * y);
         }

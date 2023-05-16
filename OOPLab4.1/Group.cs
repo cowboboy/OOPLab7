@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OOPLab4._1.OOPLab4._1;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,6 +36,23 @@ namespace OOPLab4._1
         public void addFigure(Figure figure)
         {
             storage.push_back(figure);
+            MyVector leftTop = new MyVector();
+            MyVector rightBottom = new MyVector();
+            getRect(leftTop, rightBottom);
+            MyVector center = (leftTop + rightBottom) / 2;
+            x = center.X;
+            y = center.Y;
+        }
+
+        public Figure popFigure()
+        {
+            if (storage.size > 0)
+            {
+                return storage.pop(storage.size - 1);
+            } else
+            {
+                return null;
+            }
         }
 
         public override void myPaint(in Graphics g)
@@ -45,7 +63,7 @@ namespace OOPLab4._1
             }
         }
 
-        public override bool intersects(Point coords)
+        public override bool intersects(MyVector coords)
         {
             for (int i = 0; i < storage.size; ++i)
             {
@@ -65,7 +83,7 @@ namespace OOPLab4._1
             }
         }
 
-        public override void move(Point direction)
+        public override void move(MyVector direction)
         {
             for (int i = 0; i < storage.size; ++i)
             {
@@ -73,15 +91,15 @@ namespace OOPLab4._1
             }
         }
 
-        public override void getRect(ref Point leftTop, ref Point rightBottom)
+        public override void getRect(MyVector leftTop, MyVector rightBottom)
         {
-            Point curLeftTop = new Point();
-            Point curRightBottom = new Point();
-            storage.getObject(0).getRect(ref leftTop, ref rightBottom);
+            MyVector curLeftTop = new MyVector();
+            MyVector curRightBottom = new MyVector();
+            storage.getObject(0).getRect(leftTop, rightBottom);
             for (int i = 1; i < storage.size; ++i)
             {
                 Figure curElem = storage.getObject(i);
-                curElem.getRect(ref curLeftTop, ref curRightBottom);
+                curElem.getRect(curLeftTop, curRightBottom);
                 if (curLeftTop.X < leftTop.X)
                 {
                     leftTop.X = curLeftTop.X;
@@ -101,11 +119,27 @@ namespace OOPLab4._1
             }
         }
 
-        public override void changeScale(float factor)
+        public override void changeScale(float factor, bool increase)
         {
+            MyVector leftTop = new MyVector();
+            MyVector rightBottom = new MyVector();
+            getRect(leftTop, rightBottom);
+
+            MyVector ray = new MyVector();
+            MyVector factorRay = new MyVector();
+
             for (int i = 0; i < storage.size; ++i)
             {
-                storage.getObject(i).changeScale(factor);
+                ray = new MyVector(storage.getObject(i).x, storage.getObject(i).y) - new MyVector(x, y);
+                if (increase) {
+                    factorRay = (new MyVector(storage.getObject(i).x, storage.getObject(i).y) - new MyVector(x, y)) * factor;
+                } else
+                {
+                    factorRay = (new MyVector(storage.getObject(i).x, storage.getObject(i).y) - new MyVector(x, y)) / factor;
+                }
+                MyVector direction = factorRay - ray;
+                storage.getObject(i).move(direction);
+                storage.getObject(i).changeScale(factor, increase);
             }
         }
 
