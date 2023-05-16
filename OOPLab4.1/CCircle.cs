@@ -37,7 +37,7 @@ namespace OOPLab4._1
             standartPen = new Pen(Color.Black, 5);
             selectedPen = new Pen(Color.Red, 5);
             active = false;
-            setColor(color.Name);
+            setColor(color);
         }
 
         public override void myPaint(in Graphics g)
@@ -85,12 +85,12 @@ namespace OOPLab4._1
             //y = Convert.ToInt32(factor * y);
         }
 
-        public override void load(StreamReader reader)
+        public override void load(StreamReader reader, FigureFactory factory)
         {
             x = Convert.ToInt32(reader.ReadLine());
             y = Convert.ToInt32(reader.ReadLine());
             radius = Convert.ToInt32(reader.ReadLine());
-            setColor(Convert.ToString(reader.ReadLine()));
+            setColor(Color.FromArgb(Convert.ToInt32(reader.ReadLine())));
         }
 
         public override void save(StreamWriter writer)
@@ -99,7 +99,7 @@ namespace OOPLab4._1
             writer.WriteLine(x.ToString());
             writer.WriteLine(y.ToString());
             writer.WriteLine(radius.ToString());
-            writer.WriteLine(getColor().Name);
+            writer.WriteLine(getColor().ToArgb());
         }
     }
 }

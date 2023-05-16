@@ -84,7 +84,7 @@ namespace OOPLab4._1
                         figure = factory.createFigure(Convert.ToString(line));
                         if (figure != null)
                         {
-                            figure.load(reader);
+                            figure.load(reader, factory);
                             push_back(figure);
                         }
                     }
@@ -94,10 +94,6 @@ namespace OOPLab4._1
 
         public void saveFigures(string fileName)
         {
-            if (!File.Exists(fileName))
-            {
-                File.Create(fileName).Close();
-            }
             using (StreamWriter writer = new StreamWriter(fileName))
             {
                 for (int i = 0; i < size; ++i)

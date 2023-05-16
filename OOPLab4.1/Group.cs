@@ -32,7 +32,7 @@ namespace OOPLab4._1
             storage = new Storage();
         }
 
-        public void addFigure(ref Figure figure)
+        public void addFigure(Figure figure)
         {
             storage.push_back(figure);
         }
@@ -57,11 +57,11 @@ namespace OOPLab4._1
             return false;
         }
 
-        public override void setColor(string colorName)
+        public override void setColor(Color color)
         {
             for (int i = 0; i < storage.size; ++i)
             {
-                storage.getObject(i).setColor(colorName);
+                storage.getObject(i).setColor(color);
             }
         }
 
@@ -109,16 +109,24 @@ namespace OOPLab4._1
             }
         }
 
-        public override void load(StreamReader reader)
+        public override void load(StreamReader reader, FigureFactory factory)
         {
-            for (int i = 0; i < storage.size; ++i)
+            int len = Convert.ToInt32(reader.ReadLine());
+            for (int i = 0; i < len; ++i)
             {
-                storage.getObject(i).load(reader);
+                Figure figure = factory.createFigure(reader.ReadLine());
+                if (figure != null)
+                {
+                    figure.load(reader, factory);
+                    addFigure(figure);
+                }
             }
         }
 
         public override void save(StreamWriter writer)
         {
+            writer.WriteLine("Group");
+            writer.WriteLine(storage.size);
             for (int i = 0; i < storage.size; ++i)
             {
                 storage.getObject(i).save(writer);

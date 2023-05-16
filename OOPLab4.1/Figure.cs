@@ -21,30 +21,16 @@ namespace OOPLab4._1
             return color;
         }
 
-        public virtual void setColor(string colorName)
+        public virtual void setColor(Color color)
         {
-            switch (colorName)
-            {
-                case "Green":
-                    color = Color.Green;
-                    break;
-                case "Yellow":
-                    color = Color.Yellow;
-                    break;
-                case "Blue":
-                    color = Color.Blue;
-                    break;
-                default:
-                    color = Color.White;
-                    break;
-            }
+            this.color = color;
         }
         public abstract void myPaint(in Graphics g);
         public abstract bool intersects(Point coords);
         public abstract void move(Point direction);
         public abstract void changeScale(float factor);
         public abstract void getRect(ref Point leftTop, ref Point rightBottom);
-        public abstract void load(StreamReader reader);
+        public abstract void load(StreamReader reader, FigureFactory factory);
         public abstract void save(StreamWriter writer);
     }
 }
